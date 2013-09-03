@@ -69,7 +69,7 @@ var parseLine = function(text) {
   return a
 }
 
-var createCSVIteratorFromLines = function(lineIterator, events) {
+var createCSVIterator = function(lineIterator, events) {
   var arraysIterator = iterators.map(lineIterator, function(err, text) {
     return parseLine(text)
   })
@@ -83,12 +83,6 @@ var createCSVIteratorFromLines = function(lineIterator, events) {
     return array.length > 0
   })
   return filteredIterator
-}
-
-var createLineIteratorFromPath = function(path) {
-  var fileStream = fs.createReadStream(path, {encoding: 'utf8'})
-  var fileIterator = iterators.fromReadableStream(fileStream)
-  return createLineIterator(fileIterator)
 }
 
 var createToObjectIterator = function(csvIterator) {
@@ -113,12 +107,16 @@ var createToObjectIterator = function(csvIterator) {
   return {next: next}
 }
 
-var createCSVIterator = function(opts) {
+var fromFile = function(opts) {
+  var fileStream = fs.createReadStream(opts.path, {encoding: 'utf8'})
+  var fileIterator = iterators.fromReadableStream(fileStream)
+  opts.lineIterator = createLineIterator(fileIterator)
+  return fromLineIterator(opts)
+}
+
+var fromLineIterator = function(opts) {
   var events = new EventEmitter
-  var lineIterator
-  if (opts.lineIterator) lineIterator = opts.lineIterator
-  if (opts.path) lineIterator = createLineIteratorFromPath(opts.path)
-  var csvIterator = createCSVIteratorFromLines(lineIterator, events)
+  var csvIterator = createCSVIterator(opts.lineIterator, events)
   if (opts.toObjects) csvIterator = createToObjectIterator(csvIterator)
   if (opts.from !== undefined || opts.to !== undefined) {
     csvIterator = iterators.range(csvIterator, {from: opts.from, to: opts.to})
@@ -154,7 +152,7 @@ var createObjectsToArrayIterator = function(iterator, columns) {
   return {next: next}
 }
 
-var createToCSVLinesIterator = function(iterator, opts) {
+var toLines = function(iterator, opts) {
   opts = opts || {}
   if (opts.objects) iterator = createObjectsToArrayIterator(iterator, opts.columns)
   var next = function(cb) {
@@ -173,8 +171,8 @@ var createToCSVLinesIterator = function(iterator, opts) {
   return {next: next}
 }
 
-var toCSVFile = function(iterator, opts, cb) {
-  var csvLines = createToCSVLinesIterator(iterator, opts)
+var toFile = function(iterator, opts, cb) {
+  var csvLines = toLines(iterator, opts)
   var writeStream = fs.createWriteStream(opts.path)
   iterators.toWritableStream(csvLines, writeStream, opts.encoding || 'utf8', function() {
     writeStream.end(cb)
@@ -182,7 +180,8 @@ var toCSVFile = function(iterator, opts, cb) {
 }
 
 module.exports = {
-  fromCSV: createCSVIterator,
-  toCSV: createToCSVLinesIterator,
-  toCSVFile: toCSVFile
+  fromFile: fromFile,
+  fromLineIterator: fromLineIterator,
+  toLines: toLines,
+  toFile: toFile
 }
