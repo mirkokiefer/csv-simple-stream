@@ -9,6 +9,7 @@ var testFileData = fs.readFileSync(testFile, {encoding: 'utf8'})
 var outputFile = __dirname + '/test-data/output.csv'
 var expectedOutputFile = __dirname + '/test-data/expected-output.csv'
 var expectedOutput = fs.readFileSync(expectedOutputFile, {encoding: 'utf8'})
+var badInputFile = __dirname + '/test-data/bad-input.csv'
 
 describe('csv-iterator', function() {
   it('should iterate over a csv file', function(done) {
@@ -52,6 +53,19 @@ describe('csv-iterator', function() {
         assert.deepEqual(output, expectedOutput)
         done()
       })
+    })
+  })
+  it('should fail for a bad csv file', function(done) {
+    var iterator = csvIterator.fromCSV({path: badInputFile})
+    var errorTriggered = false
+    iterator.on('error', function(err) {
+      assert.equal(err.message, 'bad line at index 3')
+      errorTriggered = true
+    })
+    iterators.toArray(iterator, function(err, res) {
+      assert.deepEqual(res, testData.badResult)
+      assert.ok(errorTriggered)
+      done()
     })
   })
 })

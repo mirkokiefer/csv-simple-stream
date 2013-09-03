@@ -3,6 +3,7 @@ var iterators = require('async-iterators')
 var createLineIterator = require('line-iterator')
 var createStreamIterator = require('stream-iterator')
 var fs = require('fs')
+var EventEmitter = require('events').EventEmitter
 
 /*
 
@@ -69,11 +70,17 @@ var parseLine = function(text) {
   return a
 }
 
-var createCSVIteratorFromLines = function(lineIterator) {
+var createCSVIteratorFromLines = function(lineIterator, events) {
   var arraysIterator = iterators.map(lineIterator, function(err, text) {
     return parseLine(text)
   })
+  var lineIndex = -1
   var filteredIterator = iterators.filter(arraysIterator, function(err, array) {
+    lineIndex++
+    if (array === null) {
+      events.emit('error', new Error('bad line at index ' + lineIndex))
+      return false
+    }
     return array.length > 0
   })
   return filteredIterator
@@ -108,15 +115,17 @@ var createToObjectIterator = function(csvIterator) {
 }
 
 var createCSVIterator = function(opts) {
+  var events = new EventEmitter
   var lineIterator
   if (opts.lineIterator) lineIterator = opts.lineIterator
   if (opts.path) lineIterator = createLineIteratorFromPath(opts.path)
-  var csvIterator = createCSVIteratorFromLines(lineIterator)
+  var csvIterator = createCSVIteratorFromLines(lineIterator, events)
   if (opts.toObjects) csvIterator = createToObjectIterator(csvIterator)
   if (opts.from !== undefined || opts.to !== undefined) {
     csvIterator = iterators.range(csvIterator, {from: opts.from, to: opts.to})
   }
-  return csvIterator
+  events.next = csvIterator.next
+  return events
 }
 
 var createToCSVLinesIterator = function(iterator) {
