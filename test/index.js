@@ -42,9 +42,22 @@ describe('csv-iterator', function() {
       done()
     })
   })
-  it('should create a csv lines iterator', function(done) {
+  it('should create a csv lines iterator from an array iterator', function(done) {
     var iterator = csvIterator.fromCSV({path: testFile})
     var toCSVLinesIterator = csvIterator.toCSVLines(iterator)
+    var writeStream = fs.createWriteStream(outputFile, {encoding: 'utf8'})
+    iterators.toWritableStream(toCSVLinesIterator, writeStream, function(err) {
+      writeStream.end(function() {
+        var output = fs.readFileSync(outputFile, {encoding: 'utf8'})
+        fs.unlinkSync(outputFile)
+        assert.deepEqual(output, expectedOutput)
+        done()
+      })
+    })
+  })
+  it('should create a csv lines iterator from an object iterator', function(done) {
+    var iterator = csvIterator.fromCSV({path: testFile, toObjects: true})
+    var toCSVLinesIterator = csvIterator.toCSVLines(iterator, {objects: true})
     var writeStream = fs.createWriteStream(outputFile, {encoding: 'utf8'})
     iterators.toWritableStream(toCSVLinesIterator, writeStream, function(err) {
       writeStream.end(function() {

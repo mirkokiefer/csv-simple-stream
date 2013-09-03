@@ -128,7 +128,36 @@ var createCSVIterator = function(opts) {
   return events
 }
 
-var createToCSVLinesIterator = function(iterator) {
+var createObjectsToArrayIterator = function(iterator, columns) {
+  var headerWritten = false
+  var firstRow
+  var next = function(cb) {
+    var writeObject = function(obj) {
+      var array = columns.map(function(each) { return obj[each] })
+      cb(null, array)
+    }
+    if (firstRow) {
+      var obj = firstRow
+      firstRow = null
+      return writeObject(obj)
+    }
+    iterator.next(function(err, obj) {
+      if (obj === undefined) return cb(null, undefined)
+      if (!headerWritten) {
+        firstRow = obj
+        columns = columns || Object.keys(obj)
+        headerWritten = true
+        return cb(null, columns)
+      }
+      writeObject(obj)
+    })
+  }
+  return {next: next}
+}
+
+var createToCSVLinesIterator = function(iterator, opts) {
+  opts = opts || {}
+  if (opts.objects) iterator = createObjectsToArrayIterator(iterator, opts.columns)
   var next = function(cb) {
     iterator.next(function(err, array) {
       if (array === undefined) return cb(null, undefined)
