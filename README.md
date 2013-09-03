@@ -17,6 +17,7 @@ The resulting iterator can be used with the [async-iterators](https://github.com
 
 ##Documentation
 ##createCSVIterator(options)
+Options:
 
 - `path`: use a file path as the input source
 - `lineIterator`: use an async [line-iterator](https://github.com/mirkokiefer/line-iterator) as the input source
