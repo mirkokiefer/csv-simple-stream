@@ -115,4 +115,20 @@ var createCSVIterator = function(opts) {
   return csvIterator
 }
 
-module.exports = createCSVIterator
+var createToCSVLinesIterator = function(iterator) {
+  var next = function(cb) {
+    iterator.next(function(err, array) {
+      if (array === undefined) return cb(null, undefined)
+      var mappedValues = array.map(function(each) {
+        return '"' + each.replace(/\"/g, '\"') + '"'
+      })
+      cb(null, mappedValues.join(',') + '\n')
+    })
+  }
+  return {next: next}
+}
+
+module.exports = {
+  fromCSV: createCSVIterator,
+  toCSVLines: createToCSVLinesIterator
+}
