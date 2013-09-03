@@ -1,0 +1,19 @@
+{
+  "name": "csv-iterator",
+  "version": "0.0.1",
+  "description": "iterate over rows in a csv file",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
+  "author": "Mirko Kiefer <mail@mirkokiefer.com>",
+  "license": "BSD",
+  "dependencies": {
+    "line-iterator": "0.0.2",
+    "stream-iterator": "0.0.1",
+    "async-iterators": "~0.1.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.1"
+  }
+}
