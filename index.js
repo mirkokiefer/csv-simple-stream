@@ -81,11 +81,37 @@ var createLineIteratorFromPath = function(path) {
   return createLineIterator(fileIterator)
 }
 
+var createToObjectIterator = function(csvIterator) {
+  var header = null
+  var next = function(cb) {
+    csvIterator.next(function(err, res) {
+      if (err) return cb(err)
+      if (res === undefined) return cb(null, undefined)
+
+      if (!header) {
+        header = res
+        return next(cb)
+      }
+
+      var object = {}
+      header.forEach(function(headline, i) {
+        object[headline] = res[i]
+      })
+      cb(null, object)
+    })
+  }
+  return {next: next}
+}
+
 var createCSVIterator = function(opts) {
   var lineIterator
   if (opts.lineIterator) lineIterator = opts.lineIterator
   if (opts.path) lineIterator = createLineIteratorFromPath(opts.path)
   var csvIterator = createCSVIteratorFromLines(lineIterator)
+  if (opts.toObjects) csvIterator = createToObjectIterator(csvIterator)
+  if (opts.from !== undefined || opts.to !== undefined) {
+    csvIterator = iterators.range(csvIterator, {from: opts.from, to: opts.to})
+  }
   return csvIterator
 }
 
