@@ -1,4 +1,7 @@
 #csv-iterator
+[![Build Status](https://travis-ci.org/mirkokiefer/csv-iterator.png?branch=master)](https://travis-ci.org/mirkokiefer/csv-iterator)
+
+[![NPM](https://nodei.co/npm/csv-iterator.png)](https://nodei.co/npm/csv-iterator/)
 
 A ligthweight async csv-iterator for Node.js.
 
