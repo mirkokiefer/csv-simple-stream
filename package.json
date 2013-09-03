@@ -1,6 +1,6 @@
 {
   "name": "csv-iterator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "iterate over rows in a csv file",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,6 @@
   },
   "devDependencies": {
     "mocha": "~1.12.1"
-  }
+  },
+  "engines" : { "node" : ">=0.10" }
 }
