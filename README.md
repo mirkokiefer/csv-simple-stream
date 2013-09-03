@@ -24,3 +24,10 @@ Options:
 - `toObjects`: transform the rows from arrays to objects according to the csv header
 - `from`: start iteration on the specified row index (index is inclusive)
 - `to`: end iteration on the specified row index (index is inclusive)
+
+##toCSV(iterator, options)
+Creates an iterator that transforms arrays or objects to CSV formatted lines.
+
+Options:
+- `objects` (default: `false`): defines whether the source iterator returns arrays or objects
+- `columns` (optional): If `objects: true` this option will configure the columns that are output.
