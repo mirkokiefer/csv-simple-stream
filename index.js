@@ -70,9 +70,13 @@ var parseLine = function(text) {
 }
 
 var createCSVIteratorFromLines = function(lineIterator) {
-  return iterators.map(lineIterator, function(err, text) {
+  var arraysIterator = iterators.map(lineIterator, function(err, text) {
     return parseLine(text)
   })
+  var filteredIterator = iterators.filter(arraysIterator, function(err, array) {
+    return array.length > 0
+  })
+  return filteredIterator
 }
 
 var createLineIteratorFromPath = function(path) {
