@@ -16,7 +16,7 @@ var iterator = csvIterator.fromCSV({path: 'input.csv', from: 10, to: 20})
 The resulting iterator can be used with the [async-iterators](https://github.com/mirkokiefer/async-iterators) module to apply transformations or write to a target.
 
 ##Documentation
-##fromCSV(options)
+###fromCSV(options)
 Options:
 
 - `path`: use a file path as the input source
@@ -25,7 +25,7 @@ Options:
 - `from`: start iteration on the specified row index (index is inclusive)
 - `to`: end iteration on the specified row index (index is inclusive)
 
-##toCSV(iterator, options)
+###toCSV(iterator, options)
 Creates an iterator that transforms arrays or objects to CSV formatted lines.
 
 Options:
