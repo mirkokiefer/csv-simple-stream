@@ -107,16 +107,17 @@ var createToObjectIterator = function(csvIterator) {
   return {next: next}
 }
 
-var fromFile = function(opts) {
-  var fileStream = fs.createReadStream(opts.path, {encoding: 'utf8'})
+var fromFile = function(path, opts) {
+  var fileStream = fs.createReadStream(path, {encoding: 'utf8'})
   var fileIterator = iterators.fromReadableStream(fileStream)
-  opts.lineIterator = createLineIterator(fileIterator)
-  return fromLineIterator(opts)
+  var lineIterator = createLineIterator(fileIterator)
+  return fromLineIterator(lineIterator, opts)
 }
 
-var fromLineIterator = function(opts) {
+var fromLineIterator = function(lineIterator, opts) {
+  opts = opts || {}
   var events = new EventEmitter
-  var csvIterator = createCSVIterator(opts.lineIterator, events)
+  var csvIterator = createCSVIterator(lineIterator, events)
   if (opts.toObjects) csvIterator = createToObjectIterator(csvIterator)
   if (opts.from !== undefined || opts.to !== undefined) {
     csvIterator = iterators.range(csvIterator, {from: opts.from, to: opts.to})
@@ -171,9 +172,13 @@ var toLines = function(iterator, opts) {
   return {next: next}
 }
 
-var toFile = function(iterator, opts, cb) {
+var toFile = function(iterator, path, opts, cb) {
+  if (cb == undefined && opts.constructor == Function) {
+    cb = opts
+    opts = {}
+  }
   var csvLines = toLines(iterator, opts)
-  var writeStream = fs.createWriteStream(opts.path)
+  var writeStream = fs.createWriteStream(path)
   iterators.toWritableStream(csvLines, writeStream, opts.encoding || 'utf8', function() {
     writeStream.end(cb)
   })

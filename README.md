@@ -10,32 +10,32 @@ Example that creates an iterator from a file to iterate over rows 10 to 20:
 ``` js
 var csvIterator = require('csv-iterator')
 
-var iterator = csvIterator.fromCSV({path: 'input.csv', from: 10, to: 20})
+var iterator = csvIterator.fromFile('input.csv', {from: 10, to: 20})
 ```
 
 The resulting iterator can be used with the [async-iterators](https://github.com/mirkokiefer/async-iterators) module to apply transformations or write to a target.
 
 ##Documentation
-###fromCSV(options)
+###fromLineIterator(lineIterator, options)
 Options:
 
-- `path`: use a file path as the input source
-- `lineIterator`: use an async [line-iterator](https://github.com/mirkokiefer/line-iterator) as the input source
 - `toObjects`: transform the rows from arrays to objects according to the csv header
 - `from`: start iteration on the specified row index (index is inclusive)
 - `to`: end iteration on the specified row index (index is inclusive)
 
-###toCSV(iterator, options)
+###fromFile(path, options)
+Same options as `fromLineIterator`.
+
+###toLines(iterator, options)
 Creates an iterator that transforms arrays or objects to CSV formatted lines.
 
 Options:
 - `objects` (default: `false`): defines whether the source iterator returns arrays or objects
 - `columns` (optional): If `objects: true` this option will configure the columns that are output.
 
-###toFile(iterator, options, cb)
-Convenience function that uses `toCSV` to write directly to a file.
+###toFile(iterator, path, [options], cb)
+Convenience function that uses `toLines` to write directly to a file.
 
 Options:
 - same as `toCSV` options
-- `path`
 - `encoding` (default `utf8`)

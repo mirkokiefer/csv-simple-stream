@@ -13,21 +13,21 @@ var badInputFile = __dirname + '/test-data/bad-input.csv'
 
 describe('csv-iterator', function() {
   it('should iterate over a csv file', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile})
+    var iterator = csvIterator.fromFile(testFile)
     iterators.toArray(iterator, function(err, res) {
       assert.deepEqual(res, testData.rawResult)
       done()
     })
   })
   it('should iterate over a limited range', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile, from: 10, to: 19})
+    var iterator = csvIterator.fromFile(testFile, {from: 10, to: 19})
     iterators.toArray(iterator, function(err, res) {
       assert.deepEqual(res, testData.rawResult.slice(10, 20))
       done()
     })
   })
   it('should iterate and transform lines to objects', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile, toObjects: true, to: 1})
+    var iterator = csvIterator.fromFile(testFile, {toObjects: true, to: 1})
     iterators.toArray(iterator, function(err, res) {
       var expected = [{
         id: '20322051544',
@@ -43,7 +43,7 @@ describe('csv-iterator', function() {
     })
   })
   it('should create a csv lines iterator from an array iterator', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile})
+    var iterator = csvIterator.fromFile(testFile)
     var toCSVLinesIterator = csvIterator.toLines(iterator)
     var writeStream = fs.createWriteStream(outputFile, {encoding: 'utf8'})
     iterators.toWritableStream(toCSVLinesIterator, writeStream, function(err) {
@@ -56,7 +56,7 @@ describe('csv-iterator', function() {
     })
   })
   it('should create a csv lines iterator from an object iterator', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile, toObjects: true})
+    var iterator = csvIterator.fromFile(testFile, {toObjects: true})
     var toCSVLinesIterator = csvIterator.toLines(iterator, {objects: true})
     var writeStream = fs.createWriteStream(outputFile, {encoding: 'utf8'})
     iterators.toWritableStream(toCSVLinesIterator, writeStream, function(err) {
@@ -69,7 +69,7 @@ describe('csv-iterator', function() {
     })
   })
   it('should fail for a bad csv file', function(done) {
-    var iterator = csvIterator.fromFile({path: badInputFile})
+    var iterator = csvIterator.fromFile(badInputFile)
     var errorTriggered = false
     iterator.on('error', function(err) {
       assert.equal(err.message, 'bad line at index 3')
@@ -82,9 +82,8 @@ describe('csv-iterator', function() {
     })
   })
   it('should write csv lines directly to file', function(done) {
-    var iterator = csvIterator.fromFile({path: testFile, toObjects: true})
-    var opts = {path: outputFile, objects: true}
-    var toCSVLinesIterator = csvIterator.toFile(iterator, opts, function() {
+    var iterator = csvIterator.fromFile(testFile, {toObjects: true})
+    var toCSVLinesIterator = csvIterator.toFile(iterator, outputFile, {objects: true}, function() {
       var output = fs.readFileSync(outputFile, {encoding: 'utf8'})
       fs.unlinkSync(outputFile)
       assert.deepEqual(output, expectedOutput)
