@@ -173,7 +173,16 @@ var createToCSVLinesIterator = function(iterator, opts) {
   return {next: next}
 }
 
+var toCSVFile = function(iterator, opts, cb) {
+  var csvLines = createToCSVLinesIterator(iterator, opts)
+  var writeStream = fs.createWriteStream(opts.path)
+  iterators.toWritableStream(csvLines, writeStream, opts.encoding || 'utf8', function() {
+    writeStream.end(cb)
+  })
+}
+
 module.exports = {
   fromCSV: createCSVIterator,
-  toCSV: createToCSVLinesIterator
+  toCSV: createToCSVLinesIterator,
+  toCSVFile: toCSVFile
 }

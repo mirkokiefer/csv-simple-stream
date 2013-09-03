@@ -81,4 +81,14 @@ describe('csv-iterator', function() {
       done()
     })
   })
+  it('should write csv lines directly to file', function(done) {
+    var iterator = csvIterator.fromCSV({path: testFile, toObjects: true})
+    var opts = {path: outputFile, objects: true}
+    var toCSVLinesIterator = csvIterator.toCSVFile(iterator, opts, function() {
+      var output = fs.readFileSync(outputFile, {encoding: 'utf8'})
+      fs.unlinkSync(outputFile)
+      assert.deepEqual(output, expectedOutput)
+      done()
+    })
+  })
 })

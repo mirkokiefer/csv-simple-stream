@@ -31,3 +31,11 @@ Creates an iterator that transforms arrays or objects to CSV formatted lines.
 Options:
 - `objects` (default: `false`): defines whether the source iterator returns arrays or objects
 - `columns` (optional): If `objects: true` this option will configure the columns that are output.
+
+###toFile(iterator, options, cb)
+Convenience function that uses `toCSV` to write directly to a file.
+
+Options:
+- same as `toCSV` options
+- `path`
+- `encoding` (default `utf8`)
