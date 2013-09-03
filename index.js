@@ -176,5 +176,5 @@ var createToCSVLinesIterator = function(iterator, opts) {
 
 module.exports = {
   fromCSV: createCSVIterator,
-  toCSVLines: createToCSVLinesIterator
+  toCSV: createToCSVLinesIterator
 }
