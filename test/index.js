@@ -7,6 +7,8 @@ var fs = require('fs')
 var testFile = __dirname + '/test-data/input.csv'
 var testFileData = fs.readFileSync(testFile, {encoding: 'utf8'})
 var outputFile = __dirname + '/test-data/output.csv'
+var expectedOutputFile = __dirname + '/test-data/expected-output.csv'
+var expectedOutput = fs.readFileSync(expectedOutputFile, {encoding: 'utf8'})
 
 describe('csv-iterator', function() {
   it('should iterate over a csv file', function(done) {
@@ -44,9 +46,12 @@ describe('csv-iterator', function() {
     var toCSVLinesIterator = csvIterator.toCSVLines(iterator)
     var writeStream = fs.createWriteStream(outputFile, {encoding: 'utf8'})
     iterators.toWritableStream(toCSVLinesIterator, writeStream, function(err) {
-      writeStream.end(done)
-      // assert.deepEqual(res.join(''), testFileData)
-      // done()
+      writeStream.end(function() {
+        var output = fs.readFileSync(outputFile, {encoding: 'utf8'})
+        fs.unlinkSync(outputFile)
+        assert.deepEqual(output, expectedOutput)
+        done()
+      })
     })
   })
 })

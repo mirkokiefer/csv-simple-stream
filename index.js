@@ -120,7 +120,11 @@ var createToCSVLinesIterator = function(iterator) {
     iterator.next(function(err, array) {
       if (array === undefined) return cb(null, undefined)
       var mappedValues = array.map(function(each) {
-        return '"' + each.replace(/\"/g, '\"') + '"'
+        if (each.indexOf('"') > -1) {
+          return '"' + each.replace(/\"/g, '\\"') + '"'
+        } else {
+          return each
+        }
       })
       cb(null, mappedValues.join(',') + '\n')
     })
