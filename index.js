@@ -1,7 +1,6 @@
 
 var iterators = require('async-iterators')
 var createLineIterator = require('line-iterator')
-var createStreamIterator = require('stream-iterator')
 var fs = require('fs')
 var EventEmitter = require('events').EventEmitter
 
@@ -88,7 +87,7 @@ var createCSVIteratorFromLines = function(lineIterator, events) {
 
 var createLineIteratorFromPath = function(path) {
   var fileStream = fs.createReadStream(path, {encoding: 'utf8'})
-  var fileIterator = createStreamIterator(fileStream)
+  var fileIterator = iterators.fromReadableStream(fileStream)
   return createLineIterator(fileIterator)
 }
 

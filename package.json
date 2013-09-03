@@ -10,7 +10,6 @@
   "license": "BSD",
   "dependencies": {
     "line-iterator": "0.0.2",
-    "stream-iterator": "0.0.1",
     "async-iterators": "~0.2.2"
   },
   "devDependencies": {
