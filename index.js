@@ -69,20 +69,24 @@ var parseLine = function(text) {
   return a
 }
 
-var createCSVIterator = function(lineIterator) {
+var createCSVIteratorFromLines = function(lineIterator) {
   return iterators.map(lineIterator, function(err, text) {
     return parseLine(text)
   })
 }
 
-var createCSVIteratorFromFile = function(path) {
+var createLineIteratorFromPath = function(path) {
   var fileStream = fs.createReadStream(path, {encoding: 'utf8'})
   var fileIterator = createStreamIterator(fileStream)
-  var lineIterator = createLineIterator(fileIterator)
-  return createCSVIterator(lineIterator)
+  return createLineIterator(fileIterator)
 }
 
-module.exports = {
-  fromLineIterator: createCSVIterator,
-  fromPath: createCSVIteratorFromFile
+var createCSVIterator = function(opts) {
+  var lineIterator
+  if (opts.lineIterator) lineIterator = opts.lineIterator
+  if (opts.path) lineIterator = createLineIteratorFromPath(opts.path)
+  var csvIterator = createCSVIteratorFromLines(lineIterator)
+  return csvIterator
 }
+
+module.exports = createCSVIterator
