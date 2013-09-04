@@ -153,6 +153,16 @@ var createObjectsToArrayIterator = function(iterator, columns) {
   return {next: next}
 }
 
+var escapeValue = function(value) {
+  if (value.indexOf('"') != -1) {
+    value = value.replace(/\"/g, '\\"')
+  }
+  if (value.match(/"|,/)) {
+    value = '"' + value + '"'
+  }
+  return value
+}
+
 var toLines = function(iterator, opts) {
   opts = opts || {}
   if (opts.objects) iterator = createObjectsToArrayIterator(iterator, opts.columns)
@@ -160,11 +170,7 @@ var toLines = function(iterator, opts) {
     iterator.next(function(err, array) {
       if (array === undefined) return cb(null, undefined)
       var mappedValues = array.map(function(each) {
-        if (each.indexOf('"') > -1) {
-          return '"' + each.replace(/\"/g, '\\"') + '"'
-        } else {
-          return each
-        }
+        return escapeValue(each)
       })
       cb(null, mappedValues.join(',') + '\n')
     })
