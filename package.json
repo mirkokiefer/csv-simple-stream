@@ -1,6 +1,6 @@
 {
   "name": "csv-iterator",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "iterate over rows in a csv file",
   "main": "lib/index.js",
   "scripts": {
