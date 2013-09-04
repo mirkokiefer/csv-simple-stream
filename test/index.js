@@ -1,6 +1,6 @@
 
 var assert = require('assert')
-var csvIterator = require('../index')
+var csvIterator = require('../lib/index')
 var iterators = require('async-iterators')
 var testData = require('./test-data/result')
 var fs = require('fs')

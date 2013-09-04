@@ -2,7 +2,7 @@
   "name": "csv-iterator",
   "version": "0.2.2",
   "description": "iterate over rows in a csv file",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },
