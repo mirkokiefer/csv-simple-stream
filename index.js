@@ -111,10 +111,10 @@ var fromFile = function(path, opts) {
   var fileStream = fs.createReadStream(path, {encoding: 'utf8'})
   var fileIterator = iterators.fromReadableStream(fileStream)
   var lineIterator = createLineIterator(fileIterator)
-  return fromLineIterator(lineIterator, opts)
+  return fromLines(lineIterator, opts)
 }
 
-var fromLineIterator = function(lineIterator, opts) {
+var fromLines = function(lineIterator, opts) {
   opts = opts || {}
   var events = new EventEmitter
   var csvIterator = createCSVIterator(lineIterator, events)
@@ -192,7 +192,7 @@ var toFile = function(iterator, path, opts, cb) {
 
 module.exports = {
   fromFile: fromFile,
-  fromLineIterator: fromLineIterator,
+  fromLines: fromLines,
   toLines: toLines,
   toFile: toFile
 }

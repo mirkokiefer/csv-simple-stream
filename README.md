@@ -16,7 +16,7 @@ var iterator = csvIterator.fromFile('input.csv', {from: 10, to: 20})
 The resulting iterator can be used with the [async-iterators](https://github.com/mirkokiefer/async-iterators) module to apply transformations or write to a target.
 
 ##Documentation
-###fromLineIterator(lineIterator, options)
+###fromLines(lineIterator, options)
 Options:
 
 - `toObjects`: transform the rows from arrays to objects according to the csv header
