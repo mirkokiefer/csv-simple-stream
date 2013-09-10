@@ -1,7 +1,7 @@
 {
-  "name": "csv-iterator",
+  "name": "csv-simple-stream",
   "version": "0.3.1",
-  "description": "iterate over rows in a csv file",
+  "description": "transform a file or character stream into a csv stream",
   "main": "lib/index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
@@ -9,11 +9,13 @@
   "author": "Mirko Kiefer <mail@mirkokiefer.com>",
   "license": "BSD",
   "dependencies": {
-    "line-iterator": "0.0.2",
-    "async-iterators": "~0.2.2"
+    "line-simple-stream": "~0.1.0",
+    "simple-stream": "~0.3.1"
   },
   "devDependencies": {
     "mocha": "~1.12.1"
   },
-  "engines" : { "node" : ">=0.10" }
+  "engines": {
+    "node": ">=0.10"
+  }
 }
