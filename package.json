@@ -1,7 +1,8 @@
 {
   "name": "csv-simple-stream",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "transform a file or character stream into a csv stream",
+  "homepage": "https://github.com/mirkokiefer/csv-simple-stream",
   "main": "lib/index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"

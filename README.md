@@ -15,7 +15,7 @@ var stream = csvStream.fromFile('input.csv', {from: 10, to: 20})
 streamUtils.forEach(stream, console.log)
 ```
 
-The resulting simple-stream can be used with the [simple-stream](https://github.com/mirkokiefer/simple-stream) module to apply transformations or write to a sink.
+The resulting simple-stream can be used with the [simple-stream module](https://github.com/mirkokiefer/simple-stream) to apply transformations or write to a sink.
 
 ##Documentation
 ###fromLines(lineStream, [options]) -> stream
