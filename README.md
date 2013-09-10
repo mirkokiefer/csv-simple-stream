@@ -38,7 +38,7 @@ Options:
 - `objects` (default: `false`): defines whether the source iterator returns arrays or objects
 - `columns` (optional): If `objects: true` this option will configure the columns that are output.
 
-###toFile(dataStream, path, [options], cb)
+###toFile(dataStream, path, [options]) -> continuable
 Convenience function that uses `toLines` to write directly to a file.
 
 Options:

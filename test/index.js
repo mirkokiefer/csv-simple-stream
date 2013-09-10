@@ -83,7 +83,7 @@ describe('csv-stream', function() {
   })
   it('should write csv lines directly to file', function(done) {
     var stream = csvStream.fromFile(testFile, {toObjects: true})
-    var toCSVLinesStream = csvStream.toFile(stream, outputFile, {objects: true}, function() {
+    var toCSVLinesStream = csvStream.toFile(stream, outputFile, {objects: true})(function() {
       var output = fs.readFileSync(outputFile, {encoding: 'utf8'})
       fs.unlinkSync(outputFile)
       assert.deepEqual(output, expectedOutput)
